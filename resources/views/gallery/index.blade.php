@@ -84,10 +84,38 @@
         </div>
     </div>
 
+    <!-- Search Bar -->
+    <div class="bg-white rounded-2xl border border-gray-150 shadow-sm p-4">
+        <form action="{{ route('gallery.index') }}" method="GET" class="flex gap-2">
+            <!-- Preserve current type and event if searching within a folder -->
+            @if(isset($selectedType))
+                <input type="hidden" name="type" value="{{ $selectedType }}">
+            @endif
+            @if(isset($selectedEvent))
+                <input type="hidden" name="event" value="{{ $selectedEvent }}">
+            @endif
+            
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass text-gray-400 text-xs"></i>
+                </div>
+                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search image captions..." class="block w-full pl-9 pr-3 py-2 text-xs border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-govblue-500 transition-shadow">
+            </div>
+            <button type="submit" class="px-4 py-2 bg-govblue-900 text-white hover:bg-govblue-950 rounded-xl text-xs font-semibold shadow-sm transition-colors">
+                Search
+            </button>
+            @if(isset($search) && $search !== '')
+                <a href="{{ route('gallery.index', ['type' => $selectedType ?? null, 'event' => $selectedEvent ?? null]) }}" class="px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-gray-750 rounded-xl text-xs font-semibold shadow-sm transition-colors flex items-center justify-center">
+                    Clear
+                </a>
+            @endif
+        </form>
+    </div>
+
     {{-- ============================================================ --}}
     {{-- LEVEL 1: Category Folders (no type selected)                  --}}
     {{-- ============================================================ --}}
-    @if(!$selectedType)
+    @if(!$selectedType && !isset($search))
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @forelse($categories as $cat)
                 @php
@@ -191,24 +219,36 @@
         <!-- Breadcrumb -->
         <div class="flex items-center gap-2 text-xs text-gray-500 font-semibold">
             <a href="{{ route('gallery.index') }}" class="hover:text-govblue-900 transition-colors">Albums</a>
-            <i class="fa-solid fa-chevron-right text-[8px] text-gray-300"></i>
-            <a href="{{ route('gallery.index', ['type' => $selectedType]) }}" class="hover:text-govblue-900 transition-colors">{{ $typeNames[$selectedType] ?? ucwords(str_replace('_', ' ', $selectedType)) }}</a>
-            @if($eventInfo)
+            @if(isset($search) && $search !== '')
                 <i class="fa-solid fa-chevron-right text-[8px] text-gray-300"></i>
-                <span class="text-gray-800">{{ $eventInfo->title }}</span>
+                <span class="text-gray-800">Search Results</span>
+            @else
+                <i class="fa-solid fa-chevron-right text-[8px] text-gray-300"></i>
+                <a href="{{ route('gallery.index', ['type' => $selectedType]) }}" class="hover:text-govblue-900 transition-colors">{{ $typeNames[$selectedType] ?? ucwords(str_replace('_', ' ', $selectedType)) }}</a>
+                @if($eventInfo)
+                    <i class="fa-solid fa-chevron-right text-[8px] text-gray-300"></i>
+                    <span class="text-gray-800">{{ $eventInfo->title }}</span>
+                @endif
             @endif
         </div>
 
         <!-- Back + Title -->
         <div class="flex items-center gap-3">
             @php
-                $backUrl = $selectedEvent ? route('gallery.index', ['type' => $selectedType]) : route('gallery.index');
+                if (isset($search) && $search !== '') {
+                    $backUrl = route('gallery.index');
+                } else {
+                    $backUrl = $selectedEvent ? route('gallery.index', ['type' => $selectedType]) : route('gallery.index');
+                }
             @endphp
             <a href="{{ $backUrl }}" class="inline-flex items-center justify-center p-2 bg-white border border-gray-250 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors shadow-sm" title="Go Back">
                 <i class="fa-solid fa-chevron-left text-sm"></i>
             </a>
             <div>
-                @if($eventInfo)
+                @if(isset($search) && $search !== '')
+                    <h2 class="text-lg font-bold text-gray-800 tracking-tight">Search Results</h2>
+                    <p class="text-xs text-gray-400">Showing images matching "{{ $search }}"</p>
+                @elseif($eventInfo)
                     <h2 class="text-lg font-bold text-gray-800 tracking-tight">{{ $eventInfo->title }}</h2>
                     <p class="text-xs text-gray-400">
                         {{ $eventInfo->subtitle }}

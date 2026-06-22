@@ -8,10 +8,20 @@ use Illuminate\Support\Facades\File;
 
 class CitizenMirrorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $entries = CitizenMirror::latest()->paginate(10);
-        return view('citizen_mirror.index', compact('entries'));
+        $search = $request->query('search');
+        $query = CitizenMirror::latest();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('division', 'like', '%' . $search . '%');
+            });
+        }
+
+        $entries = $query->paginate(10)->appends(['search' => $search]);
+        return view('citizen_mirror.index', compact('entries', 'search'));
     }
 
     public function create()

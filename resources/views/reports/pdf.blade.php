@@ -195,6 +195,14 @@
                 <td>Registered Divisional Productivity Officers</td>
                 <td class="text-right" style="font-weight: 600;">{{ $data['registered_officers_count'] ?? 0 }}</td>
             </tr>
+            <tr>
+                <td>4i Project Allocations</td>
+                <td class="text-right" style="font-weight: 600;">{{ $data['allocations_count'] ?? 0 }}</td>
+            </tr>
+            <tr>
+                <td>Letter Management</td>
+                <td class="text-right" style="font-weight: 600;">{{ $data['letters_count'] ?? 0 }}</td>
+            </tr>
         </tbody>
     </table>
 

@@ -110,6 +110,14 @@
                             <td class="py-2">Registered Productivity Officers</td>
                             <td class="py-2 text-right font-bold">{{ $data['registered_officers_count'] ?? 0 }}</td>
                         </tr>
+                        <tr>
+                            <td class="py-2">4i Project Allocations</td>
+                            <td class="py-2 text-right font-bold">{{ $data['allocations_count'] ?? 0 }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Letter Management</td>
+                            <td class="py-2 text-right font-bold">{{ $data['letters_count'] ?? 0 }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -127,7 +135,7 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['NPC', 'CMV', 'Mirror', 'Video', 'Proposal', '5S', 'Course', 'Training'],
+                labels: ['NPC', 'CMV', 'Mirror', 'Video', 'Proposal', '5S', 'Course', 'Training', 'Allocations', 'Letters'],
                 datasets: [{
                     label: 'Entries count',
                     data: [
@@ -138,7 +146,9 @@
                         {{ $data['proyouth_proposals_count'] ?? 0 }},
                         {{ $data['five_s_certifications_count'] ?? 0 }},
                         {{ $data['certification_courses_count'] ?? 0 }},
-                        {{ $data['training_programs_count'] ?? 0 }}
+                        {{ $data['training_programs_count'] ?? 0 }},
+                        {{ $data['allocations_count'] ?? 0 }},
+                        {{ $data['letters_count'] ?? 0 }}
                     ],
                     backgroundColor: 'rgba(56, 102, 234, 0.8)',
                     borderColor: 'rgba(56, 102, 234, 1)',

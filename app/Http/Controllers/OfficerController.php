@@ -9,10 +9,21 @@ use App\Models\Notification;
 
 class OfficerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $officers = Officer::latest()->paginate(12);
-        return view('officers.index', compact('officers'));
+        $search = $request->query('search');
+        $query = Officer::latest();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('division_name', 'like', '%' . $search . '%')
+                  ->orWhere('nic_number', 'like', '%' . $search . '%');
+            });
+        }
+
+        $officers = $query->paginate(10)->appends(['search' => $search]);
+        return view('officers.index', compact('officers', 'search'));
     }
 
     public function create()

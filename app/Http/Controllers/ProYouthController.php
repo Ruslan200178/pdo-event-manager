@@ -11,11 +11,31 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProYouthController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $videos = ProYouthVideo::latest()->paginate(10, ['*'], 'videos_page');
-        $proposals = ProYouthProposal::latest()->paginate(10, ['*'], 'proposals_page');
-        return view('proyouth.index', compact('videos', 'proposals'));
+        $search = $request->query('search');
+
+        $videosQuery = ProYouthVideo::latest();
+        $proposalsQuery = ProYouthProposal::latest();
+
+        if ($search) {
+            $videosQuery->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('nic_number', 'like', '%' . $search . '%')
+                  ->orWhere('ds_division', 'like', '%' . $search . '%');
+            });
+
+            $proposalsQuery->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('nic_number', 'like', '%' . $search . '%')
+                  ->orWhere('ds_division', 'like', '%' . $search . '%');
+            });
+        }
+
+        $videos = $videosQuery->paginate(10, ['*'], 'videos_page')->appends(['search' => $search]);
+        $proposals = $proposalsQuery->paginate(10, ['*'], 'proposals_page')->appends(['search' => $search]);
+
+        return view('proyouth.index', compact('videos', 'proposals', 'search'));
     }
 
     // Video competition methods

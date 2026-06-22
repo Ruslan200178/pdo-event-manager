@@ -12,24 +12,19 @@ class NationalProductivityController extends Controller
 {
     public function index(Request $request)
     {
-        $voteNumber = $request->query('vote_number');
-        $place = $request->query('place');
-        $receivedAllocation = $request->query('received_allocation');
-
+        $search = $request->query('search');
         $query = NationalProductivityCompetition::latest();
 
-        if ($voteNumber) {
-            $query->where('vote_number', 'like', '%' . $voteNumber . '%');
-        }
-        if ($place) {
-            $query->where('place', 'like', '%' . $place . '%');
-        }
-        if ($receivedAllocation) {
-            $query->where('received_allocation', $receivedAllocation);
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('vote_number', 'like', '%' . $search . '%')
+                  ->orWhere('place', 'like', '%' . $search . '%')
+                  ->orWhere('program_name', 'like', '%' . $search . '%');
+            });
         }
 
-        $programs = $query->paginate(10);
-        return view('national_productivity.index', compact('programs', 'voteNumber', 'place', 'receivedAllocation'));
+        $programs = $query->paginate(10)->appends(['search' => $search]);
+        return view('national_productivity.index', compact('programs', 'search'));
     }
 
     public function create()

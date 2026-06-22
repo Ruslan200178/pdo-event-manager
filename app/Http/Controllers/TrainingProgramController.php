@@ -10,10 +10,20 @@ use App\Models\Notification;
 
 class TrainingProgramController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $programs = TrainingProgram::latest()->paginate(10);
-        return view('training.index', compact('programs'));
+        $search = $request->query('search');
+        $query = TrainingProgram::latest();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('institution', 'like', '%' . $search . '%')
+                  ->orWhere('district', 'like', '%' . $search . '%');
+            });
+        }
+
+        $programs = $query->paginate(10)->appends(['search' => $search]);
+        return view('training.index', compact('programs', 'search'));
     }
 
     public function create()

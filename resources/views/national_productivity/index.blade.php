@@ -18,43 +18,23 @@
         </div>
     </div>
 
-    <!-- Search/Filter Bar -->
-    <div class="bg-white rounded-2xl border border-gray-150 shadow-sm p-4 md:p-6">
-        <form action="{{ route('npc.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
-            <!-- Vote Number -->
-            <div>
-                <label for="vote_number" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Vote Number</label>
-                <input type="text" name="vote_number" id="vote_number" placeholder="Search vote number..." value="{{ $voteNumber }}" class="block w-full px-3 py-2 text-xs border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-govblue-500">
+    <!-- Search Bar -->
+    <div class="bg-white rounded-2xl border border-gray-150 shadow-sm p-4">
+        <form action="{{ route('npc.index') }}" method="GET" class="flex gap-2">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass text-gray-400 text-xs"></i>
+                </div>
+                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search by vote number, place, or program name..." class="block w-full pl-9 pr-3 py-2 text-xs border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-govblue-500 transition-shadow">
             </div>
-
-            <!-- Place / Location -->
-            <div>
-                <label for="place" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Place / Location</label>
-                <input type="text" name="place" id="place" placeholder="Search place..." value="{{ $place }}" class="block w-full px-3 py-2 text-xs border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-govblue-500">
-            </div>
-
-            <!-- Received Allocation -->
-            <div>
-                <label for="received_allocation" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Received Allocation</label>
-                <select name="received_allocation" id="received_allocation" class="block w-full px-3 py-2 text-xs border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-govblue-500 bg-white">
-                    <option value="">All</option>
-                    <option value="Yes" {{ $receivedAllocation == 'Yes' ? 'selected' : '' }}>Yes</option>
-                    <option value="No" {{ $receivedAllocation == 'No' ? 'selected' : '' }}>No</option>
-                </select>
-            </div>
-
-            <!-- Buttons -->
-            <div class="flex gap-2">
-                <button type="submit" class="flex-1 px-4 py-2 bg-govblue-900 text-white hover:bg-govblue-950 rounded-xl text-xs font-semibold shadow-sm transition-colors flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
-                    <span>Search</span>
-                </button>
-                @if($voteNumber || $place || $receivedAllocation)
-                    <a href="{{ route('npc.index') }}" class="px-4 py-2 border border-gray-300 bg-white hover:bg-gray-55 text-gray-750 rounded-xl text-xs font-semibold shadow-sm flex items-center justify-center">
-                        Clear
-                    </a>
-                @endif
-            </div>
+            <button type="submit" class="px-4 py-2 bg-govblue-900 text-white hover:bg-govblue-950 rounded-xl text-xs font-semibold shadow-sm transition-colors">
+                Search
+            </button>
+            @if(isset($search) && $search !== '')
+                <a href="{{ route('npc.index') }}" class="px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-gray-750 rounded-xl text-xs font-semibold shadow-sm transition-colors flex items-center justify-center">
+                    Clear
+                </a>
+            @endif
         </form>
     </div>
 

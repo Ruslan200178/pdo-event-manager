@@ -83,6 +83,8 @@
                         ['route' => 'cmv.index', 'label' => 'Model Village Program', 'icon' => 'fa-house-chimney-window', 'active' => 'cmv.*'],
                         ['route' => 'citizen-mirror.index', 'label' => 'Citizen Mirror', 'icon' => 'fa-users-viewfinder', 'active' => 'citizen-mirror.*'],
                         ['route' => 'proyouth.index', 'label' => 'ProYouth Program', 'icon' => 'fa-rocket', 'active' => 'proyouth.*'],
+                        ['route' => 'fouri.index', 'label' => '4i Project', 'icon' => 'fa-circle-info', 'active' => 'fouri.*'],
+                        ['route' => 'letters.index', 'label' => 'Letter Management', 'icon' => 'fa-envelope-open-text', 'active' => 'letters.*'],
                         ['route' => 'five-s.index', 'label' => '5S Certification', 'icon' => 'fa-certificate', 'active' => 'five-s.*'],
                         ['route' => 'courses.index', 'label' => 'Certification Course', 'icon' => 'fa-graduation-cap', 'active' => 'courses.*'],
                         ['route' => 'training.index', 'label' => 'Training Program', 'icon' => 'fa-chalkboard-user', 'active' => 'training.*'],

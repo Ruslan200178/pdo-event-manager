@@ -8,10 +8,20 @@ use App\Models\Notification;
 
 class CertificationCourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = CertificationCourse::latest()->paginate(10);
-        return view('courses.index', compact('courses'));
+        $search = $request->query('search');
+        $query = CertificationCourse::latest();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('institution', 'like', '%' . $search . '%')
+                  ->orWhere('year', 'like', '%' . $search . '%');
+            });
+        }
+
+        $courses = $query->paginate(10)->appends(['search' => $search]);
+        return view('courses.index', compact('courses', 'search'));
     }
 
     public function create()

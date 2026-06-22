@@ -9,10 +9,20 @@ use App\Models\Notification;
 
 class FiveSController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $records = FiveSCertification::latest()->paginate(10);
-        return view('five_s.index', compact('records'));
+        $search = $request->query('search');
+        $query = FiveSCertification::latest();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('program_name', 'like', '%' . $search . '%')
+                  ->orWhere('institution', 'like', '%' . $search . '%');
+            });
+        }
+
+        $records = $query->paginate(10)->appends(['search' => $search]);
+        return view('five_s.index', compact('records', 'search'));
     }
 
     public function create()

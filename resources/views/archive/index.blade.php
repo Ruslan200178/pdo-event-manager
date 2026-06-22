@@ -32,10 +32,10 @@
                 </select>
             </div>
 
-            <!-- Division -->
+            <!-- Search -->
             <div>
-                <label for="division" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">DS Division</label>
-                <input type="text" name="division" id="division" placeholder="Search division..." value="{{ $division }}" class="block w-full px-3 py-2 text-xs border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-govblue-500">
+                <label for="search" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Search</label>
+                <input type="text" name="search" id="search" placeholder="Search titles, divisions..." value="{{ $search }}" class="block w-full px-3 py-2 text-xs border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-govblue-500">
             </div>
 
             <!-- Module -->
@@ -55,7 +55,7 @@
                     <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
                     <span>Search</span>
                 </button>
-                @if($year || $division || $module)
+                @if($year || $search || $module)
                     <a href="{{ route('archive.index') }}" class="px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-gray-750 rounded-xl text-xs font-semibold shadow-sm transition-colors flex items-center justify-center">
                         Clear
                     </a>

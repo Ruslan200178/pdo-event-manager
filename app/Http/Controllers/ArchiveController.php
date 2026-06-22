@@ -12,7 +12,7 @@ class ArchiveController extends Controller
     public function index(Request $request)
     {
         $year = $request->query('year');
-        $division = $request->query('division');
+        $search = $request->query('search');
         $module = $request->query('module_name');
 
         $query = Archive::latest();
@@ -20,25 +20,29 @@ class ArchiveController extends Controller
         if ($year) {
             $query->where('year', $year);
         }
-        if ($division) {
-            $query->where('division', 'like', '%' . $division . '%');
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('division', 'like', '%' . $search . '%')
+                  ->orWhere('title', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
         }
         if ($module) {
             $query->where('module_name', $module);
         }
 
-        $archives = $query->paginate(15);
+        $archives = $query->paginate(10)->appends(['year' => $year, 'search' => $search, 'module_name' => $module]);
 
         // Fetch unique years and modules for filter options
         $years = Archive::distinct()->orderBy('year', 'desc')->pluck('year')->toArray();
-        $modules = ['NPC', 'CMV', 'Citizen Mirror', 'ProYouth', '5S', 'Certification Course', 'Training', 'Officers'];
+        $modules = ['NPC', 'CMV', 'Citizen Mirror', 'ProYouth', '4i Project', 'Letter Management', '5S', 'Certification Course', 'Training', 'Officers'];
 
-        return view('archive.index', compact('archives', 'years', 'modules', 'year', 'division', 'module'));
+        return view('archive.index', compact('archives', 'years', 'modules', 'year', 'search', 'module'));
     }
 
     public function create()
     {
-        $modules = ['NPC', 'CMV', 'Citizen Mirror', 'ProYouth', '5S', 'Certification Course', 'Training', 'Officers'];
+        $modules = ['NPC', 'CMV', 'Citizen Mirror', 'ProYouth', '4i Project', 'Letter Management', '5S', 'Certification Course', 'Training', 'Officers'];
         return view('archive.create', compact('modules'));
     }
 
@@ -87,7 +91,7 @@ class ArchiveController extends Controller
     public function edit($id)
     {
         $archive = Archive::findOrFail($id);
-        $modules = ['NPC', 'CMV', 'Citizen Mirror', 'ProYouth', '5S', 'Certification Course', 'Training', 'Officers'];
+        $modules = ['NPC', 'CMV', 'Citizen Mirror', 'ProYouth', '4i Project', 'Letter Management', '5S', 'Certification Course', 'Training', 'Officers'];
         return view('archive.edit', compact('archive', 'modules'));
     }
 

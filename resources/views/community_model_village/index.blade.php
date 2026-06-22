@@ -18,17 +18,25 @@
         </div>
     </div>
 
-    @if (true)
-        <div class="flex justify-between items-center mb-4">
-            <form method="GET" action="{{ route('cmv.index') }}" class="flex gap-2">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by Village or Vote Number" class="px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-govblue-500" />
-                <button type="submit" class="px-4 py-2 bg-govblue-900 text-white rounded-xl text-xs font-semibold hover:bg-govblue-950 transition-colors">Search</button>
-                @if(request('search'))
-                    <a href="{{ route('cmv.index') }}" class="px-3 py-2 bg-gray-200 text-gray-700 rounded-xl text-xs font-semibold hover:bg-gray-300 transition-colors">Clear</a>
-                @endif
-            </form>
-        </div>
-    @endif
+    <!-- Search Bar -->
+    <div class="bg-white rounded-2xl border border-gray-150 shadow-sm p-4">
+        <form action="{{ route('cmv.index') }}" method="GET" class="flex gap-2">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass text-gray-400 text-xs"></i>
+                </div>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by Village or Vote Number..." class="block w-full pl-9 pr-3 py-2 text-xs border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-govblue-500 transition-shadow">
+            </div>
+            <button type="submit" class="px-4 py-2 bg-govblue-900 text-white hover:bg-govblue-950 rounded-xl text-xs font-semibold shadow-sm transition-colors">
+                Search
+            </button>
+            @if(request('search'))
+                <a href="{{ route('cmv.index') }}" class="px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-gray-750 rounded-xl text-xs font-semibold shadow-sm transition-colors flex items-center justify-center">
+                    Clear
+                </a>
+            @endif
+        </form>
+    </div>
     <div class="bg-white rounded-2xl border border-gray-150 shadow-sm overflow-hidden">
         <!-- Tabs Header -->
         <div class="flex border-b border-gray-100 bg-gray-55/40 p-2 gap-2">

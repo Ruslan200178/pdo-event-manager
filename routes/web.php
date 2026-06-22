@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
 
     // ProYouth Program
     Route::get('proyouth', [ProYouthController::class, 'index'])->name('proyouth.index');
+    Route::get('4i', [App\Http\Controllers\FourIController::class, 'index'])->name('fouri.index');
     // Video entries
     Route::get('proyouth/video/create', [ProYouthController::class, 'createVideo'])->name('proyouth.video.create');
     Route::post('proyouth/video', [ProYouthController::class, 'storeVideo'])->name('proyouth.video.store');
@@ -100,6 +101,15 @@ Route::middleware(['auth'])->group(function () {
 
     // Officers
     Route::resource('officers', OfficerController::class);
+
+    // 4i Program
+    Route::resource('allocations', App\Http\Controllers\AllocationController::class)->names('fouri.allocations');
+    Route::get('allocations/{allocation}/report', [App\Http\Controllers\AllocationController::class, 'report'])->name('fouri.allocations.report');
+    Route::get('allocations/{allocation}/report/download', [App\Http\Controllers\AllocationController::class, 'downloadReport'])->name('fouri.allocations.report.download');
+    Route::delete('allocations/images/{image}', [App\Http\Controllers\AllocationController::class, 'destroyImage'])->name('fouri.allocations.images.destroy');
+    Route::resource('letters', App\Http\Controllers\LetterController::class);
+    Route::get('letters/{letter}/report', [App\Http\Controllers\LetterController::class, 'report'])->name('letters.report');
+    Route::get('letters/{letter}/report/download', [App\Http\Controllers\LetterController::class, 'downloadReport'])->name('letters.report.download');
 
     // Gallery
     Route::get('gallery', [GalleryController::class, 'index'])->name('gallery.index');

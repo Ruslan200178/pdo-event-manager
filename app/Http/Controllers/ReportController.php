@@ -14,6 +14,8 @@ use App\Models\CertificationCourse;
 use App\Models\TrainingProgram;
 use App\Models\Officer;
 use App\Models\Notification;
+use App\Models\Allocation;
+use App\Models\Letter;
 use Illuminate\Support\Facades\File;
 
 class ReportController extends Controller
@@ -46,6 +48,8 @@ class ReportController extends Controller
             'training_programs_count' => TrainingProgram::count(),
             'training_participants_total' => TrainingProgram::sum('participants_count'),
             'registered_officers_count' => Officer::count(),
+            'allocations_count' => Allocation::count(),
+            'letters_count' => Letter::count(),
         ];
 
         $report = Report::create([
@@ -133,6 +137,8 @@ class ReportController extends Controller
                 'Training Programs Count' => $data['training_programs_count'] ?? 0,
                 'Training Participants Total' => $data['training_participants_total'] ?? 0,
                 'Registered Productivity Officers Count' => $data['registered_officers_count'] ?? 0,
+                '4i Project Allocations Count' => $data['allocations_count'] ?? 0,
+                'Letter Management Count' => $data['letters_count'] ?? 0,
             ];
 
             foreach ($rows as $metric => $val) {

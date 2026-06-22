@@ -18,6 +18,26 @@
         </div>
     </div>
 
+    <!-- Search Bar -->
+    <div class="bg-white rounded-2xl border border-gray-150 shadow-sm p-4">
+        <form action="{{ route('training.index') }}" method="GET" class="flex gap-2">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass text-gray-400 text-xs"></i>
+                </div>
+                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search by institution or district..." class="block w-full pl-9 pr-3 py-2 text-xs border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-govblue-500 transition-shadow">
+            </div>
+            <button type="submit" class="px-4 py-2 bg-govblue-900 text-white hover:bg-govblue-950 rounded-xl text-xs font-semibold shadow-sm transition-colors">
+                Search
+            </button>
+            @if(isset($search) && $search !== '')
+                <a href="{{ route('training.index') }}" class="px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-gray-750 rounded-xl text-xs font-semibold shadow-sm transition-colors flex items-center justify-center">
+                    Clear
+                </a>
+            @endif
+        </form>
+    </div>
+
     <!-- Table Card -->
     <div class="bg-white rounded-2xl border border-gray-150 shadow-sm overflow-hidden">
         <div class="p-6">

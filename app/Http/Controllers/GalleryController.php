@@ -15,6 +15,7 @@ class GalleryController extends Controller
     {
         $selectedType = $request->query('type');
         $selectedEvent = $request->query('event'); // program_id
+        $search = $request->query('search');
         
         // Get distinct program types with count of images
         $categories = GalleryImage::selectRaw('program_type, COUNT(*) as image_count')
@@ -25,13 +26,19 @@ class GalleryController extends Controller
         $events = null;
         $eventInfo = null;
 
-        if ($selectedType && $selectedEvent) {
+        if ($search) {
+            // Global search bypasses folder structure
+            $images = GalleryImage::where('caption', 'like', '%' . $search . '%')
+                ->latest()
+                ->paginate(10)
+                ->appends(['search' => $search, 'type' => $selectedType, 'event' => $selectedEvent]);
+        } elseif ($selectedType && $selectedEvent) {
             // Level 3: Show images for a specific event
             $images = GalleryImage::where('program_type', $selectedType)
                 ->where('program_id', $selectedEvent)
                 ->latest()
-                ->paginate(12)
-                ->appends(['type' => $selectedType, 'event' => $selectedEvent]);
+                ->paginate(10)
+                ->appends(['type' => $selectedType, 'event' => $selectedEvent, 'search' => $search]);
 
             // Get event details
             $eventInfo = $this->getEventInfo($selectedType, $selectedEvent);
@@ -54,13 +61,13 @@ class GalleryController extends Controller
             if ($allNull) {
                 $images = GalleryImage::where('program_type', $selectedType)
                     ->latest()
-                    ->paginate(12)
-                    ->appends(['type' => $selectedType]);
+                    ->paginate(10)
+                    ->appends(['type' => $selectedType, 'search' => $search]);
                 $events = null;
             }
         }
 
-        return view('gallery.index', compact('images', 'categories', 'selectedType', 'events', 'selectedEvent', 'eventInfo'));
+        return view('gallery.index', compact('images', 'categories', 'selectedType', 'events', 'selectedEvent', 'eventInfo', 'search'));
     }
 
     /**
